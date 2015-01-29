@@ -5,7 +5,7 @@
 #include <ctime>
 
 
-#define NROUNDS 1000000
+#define NROUNDS 100000
 
 
 std::default_random_engine rnd;
@@ -15,6 +15,8 @@ int main(void) {
     rnd.seed(time(NULL));
 
     unsigned nWinners[3] = {0};
+
+    std::vector<std::pair<std::vector<unsigned>, unsigned>> data;
 
     for (auto n=0u; n<NROUNDS; ++n) {
         UtttGame game;
@@ -31,7 +33,13 @@ int main(void) {
             player = player ^ 0x03;
         }
 
+        data.push_back(std::make_pair(game.getHistory(), game.getWinner()));
+
         nWinners[game.getWinner()-1]++;
+
+        //for (auto& a : data.back().first)
+        //    printf("%u ", a);
+        //printf(" (won by player %hi)\n", data.back().second);
 
         printf("%0.2f%%\r", (float)(n*100)/NROUNDS);
     }

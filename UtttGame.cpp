@@ -7,7 +7,7 @@ UtttGame::UtttGame(void) :
     board_{ },
     smallGamesWon_{ },
     winner_(0),
-    lastPlayed_(0)
+    history_(0)
 {}
 
 std::vector<unsigned> UtttGame::play(unsigned player, unsigned coord) {
@@ -15,7 +15,7 @@ std::vector<unsigned> UtttGame::play(unsigned player, unsigned coord) {
     auto sgy = coord / 27;
     if (smallGamesWon_[sgx][sgy] == 0 && board_[coord] == 0) {
         board_[coord] = player;
-        lastPlayed_ = coord;
+        history_.push_back(coord);
     }
 
     checkSmallGame(sgx, sgy);
@@ -39,7 +39,7 @@ std::vector<unsigned> UtttGame::play(unsigned player, unsigned x, unsigned y) {
     auto coord = 9*y + x;
     if (smallGamesWon_[sgx][sgy] == 0 && board_[coord] == 0) {
         board_[coord] = player;
-        lastPlayed_ = 9*y + x;
+        history_.push_back(9*y + x);
     }
 
     checkSmallGame(sgx, sgy);
@@ -78,6 +78,10 @@ std::vector<unsigned> UtttGame::getSlotsAvailable(void) const {
     return out;
 }
 
+const std::vector<unsigned>& UtttGame::getHistory(void) const {
+    return history_;
+}
+
 short UtttGame::getWinner(void) const {
     return winner_;
 }
@@ -85,7 +89,7 @@ short UtttGame::getWinner(void) const {
 void UtttGame::printGame(void) const {
     for (auto y=0u; y<9; ++y) {
         for (auto x=0u; x<9; ++x)
-            if (9*y + x == lastPlayed_)
+            if (9*y + x == history_.back())
                 printf("%c ", board_[9*y + x] == 0 ? '.' : board_[9*y + x] == 1 ? 'X' : 'O');
             else
                 printf("%c ", board_[9*y + x] == 0 ? '.' : board_[9*y + x] == 1 ? 'x' : 'o');

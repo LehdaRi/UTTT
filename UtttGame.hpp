@@ -15,6 +15,8 @@ public:
     std::vector<unsigned> getSlotsAvailable(unsigned sgx, unsigned sgy) const;
     std::vector<unsigned> getSlotsAvailable(void) const;
 
+    const std::vector<unsigned>& getHistory(void) const;
+
     short getWinner(void) const;
 
     void printGame(void) const;
@@ -24,7 +26,7 @@ private:
     short board_[81];
     short smallGamesWon_[3][3];
     short winner_;
-    unsigned lastPlayed_;
+    std::vector<unsigned> history_;
 
     void checkSmallGame(unsigned sgx, unsigned sgy);
     void checkGame(void);
